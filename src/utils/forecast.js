@@ -1,6 +1,6 @@
 const request=require('request')
 
-const forecast = (lat,long,callback)=>{
+const forecast = (lat,long,place,callback)=>{
     const url = 'http://api.weatherstack.com/current?access_key=48e3d7078af924c3846e9db7ba7258bd&query='+lat+','+long
     request({url:url,json:true},(error,response)=>{
         if(error){
@@ -10,7 +10,13 @@ const forecast = (lat,long,callback)=>{
             callback('unable to find location',undefined)
         }
         else{
-            callback(undefined,response.body.current.temperature)
+            const data={
+                temp: response.body.current.temperature,
+                feel: response.body.current.feelslike,
+                humidity: response.body.current.humidity,
+                place: place
+            }
+            callback(undefined,data)
         }
     })
 
